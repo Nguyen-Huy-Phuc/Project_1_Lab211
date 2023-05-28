@@ -28,13 +28,26 @@ import model.Nurse;
 import tool.Add;
 import tool.Check;
 
+/**
+ * Dây là lớp chứa các thao tác đôi với bênh nhân
+ *
+ * @author Nguyễn Huy Phúc
+ */
 public class ListPatient extends HashMap<String, Patient> implements Serializable {
 
     Scanner sc = new Scanner(System.in);
-    private Add add = new Add();
+    Add add = new Add();
+    Check check = new Check();
     private int n = 0;
 //Các hàm của phương thức add
+//-----------------------------------------------------------------------------------------------------------------------------------------//
 
+    /**
+     * Phườn thức thêm 1 bệnh nhân mới
+     *
+     * @param p
+     * @return boolean
+     */
     public boolean addNewPatient(Patient p) {
         if (this.containsKey(p.getID())) {
             return false;
@@ -46,6 +59,11 @@ public class ListPatient extends HashMap<String, Patient> implements Serializabl
         }
     }
 
+    /**
+     * Kiểm tra ID đầu vào có bị trùng hay không
+     *
+     * @return boolean
+     */
     public String checkIDOfListPatient() {
         String id = null;
         boolean c = true;
@@ -54,7 +72,7 @@ public class ListPatient extends HashMap<String, Patient> implements Serializabl
             if (id.trim().equals("")) {
                 System.out.println("   (!) Please enter a non-null value !!! Try again.");
             } else if (this.existIDOfP(id)) {
-                System.out.println("   (!) ID da ton tai! Try again.");
+                System.out.println("   (!) ID already exist! Try again.");
             } else {
                 c = false;
             }
@@ -62,6 +80,12 @@ public class ListPatient extends HashMap<String, Patient> implements Serializabl
         return id;
     }
 
+    /**
+     * Kiểm tra ý tá thứ 1 có tồn tại và đủ điểu kiện để chăm sóc hay không Chọn
+     * làm đầu vào
+     *
+     * @return String
+     */
     public String checkNurseAssignedNumber1() {
         ListNurse listN = new ListNurse();
         boolean c = true;
@@ -79,6 +103,12 @@ public class ListPatient extends HashMap<String, Patient> implements Serializabl
         return nurseAssigned1;
     }
 
+    /**
+     * Kiểm tra ý tá thứ 2 có tồn tại và đủ điểu kiện để chăm sóc hay không Chọn
+     * làm đầu vào
+     *
+     * @return String
+     */
     public String checkNurseAssignedNumber2() {
         ListNurse listN = new ListNurse();
         boolean c = true;
@@ -95,16 +125,15 @@ public class ListPatient extends HashMap<String, Patient> implements Serializabl
         } while (c);
         return nurseAssigned2;
     }
+//Các hàm của phương thức chung
+//-----------------------------------------------------------------------------------------------------------------------------------------//
 
-    public boolean existIDOfP(String id) {
-        for (Patient p : this.values()) {
-            if (p.getID().equals(id)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
+    /**
+     * Kiểm tra ý tá có tồn tịa hay không
+     *
+     * @param nurseAssigned
+     * @return boolean
+     */
     public boolean checkNurseAssigned(String nurseAssigned) {
         for (Patient P : this.values()) {
             if (P.getNurseAssigned1().equalsIgnoreCase(nurseAssigned) || P.getNurseAssigned2().equalsIgnoreCase(nurseAssigned)) {
@@ -114,6 +143,12 @@ public class ListPatient extends HashMap<String, Patient> implements Serializabl
         return false;
     }
 
+    /**
+     * Kiểm tra y tá đang chăm sóc bao nhiêu người
+     *
+     * @param nurseAssigned
+     * @return int
+     */
     public int coutNurseAssigned(String nurseAssigned) {
         int x = 0;
         for (Patient P : this.values()) {
@@ -123,8 +158,29 @@ public class ListPatient extends HashMap<String, Patient> implements Serializabl
         }
         return x;
     }
-//Phương thức display
 
+    /**
+     * Kiểm tra ID của bệnh nhân có tồn tại hay không
+     *
+     * @param id
+     * @return boolean
+     */
+    public boolean existIDOfP(String id) {
+        for (Patient p : this.values()) {
+            if (p.getID().equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+//Phương thức display
+//-----------------------------------------------------------------------------------------------------------------------------------------//
+
+    /**
+     * Kiểm tra định dạng ngày bắt đầu Chọn làm đầu vào
+     *
+     * @return String
+     */
     public String checkStartDate() {
         boolean checkD = true;
         String sDate = "";
@@ -136,12 +192,17 @@ public class ListPatient extends HashMap<String, Patient> implements Serializabl
             if (matcher.matches()) {
                 checkD = false;
             } else {
-                System.out.println("   (!) Please enter correct format !!! Try again.");
+                System.out.println("   (!) Please enter correct format (dd/MM/yyyy) !!! Try again.");
             }
         } while (checkD);
         return sDate;
     }
 
+    /**
+     * Kiểm tra định dạng ngày kết thúc Chọn làm đầu vào
+     *
+     * @return
+     */
     public String checkEndDate() {
         boolean checkD_ = true;
         String eDate = "";
@@ -153,12 +214,18 @@ public class ListPatient extends HashMap<String, Patient> implements Serializabl
             if (matcher.matches()) {
                 checkD_ = false;
             } else {
-                System.out.println("   (!) Please enter correct format !!! Try again.");
+                System.out.println("   (!) Please enter correct format (dd/MM/yyyy) !!! Try again.");
             }
         } while (checkD_);
         return eDate;
     }
 
+    /**
+     * Thao tác in ra những bệnh nhân trong khảng thời gian đã cho
+     *
+     * @param startDate
+     * @param endDate
+     */
     public void displayPatient(String startDate, String endDate) {
         LocalDate sDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         LocalDate eDate = LocalDate.parse(endDate, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
@@ -170,56 +237,10 @@ public class ListPatient extends HashMap<String, Patient> implements Serializabl
             }
         }
     }
-//Các hàm của Phương thức sort
 
-    public void sortPatientASCByName() {
-        List<Patient> patientList = new ArrayList<Patient>(this.values());
-        Collections.sort(patientList, new Comparator<Patient>() {
-            public int compare(Patient p1, Patient p2) {
-                return p1.getName().compareTo(p2.getName());
-            }
-        });
-        for (Patient P : patientList) {
-            System.out.println(P);
-        }
-    }
-
-    public void sortPatientDESCByName() {
-        List<Patient> patientList = new ArrayList<Patient>(this.values());
-        Collections.sort(patientList, new Comparator<Patient>() {
-            public int compare(Patient p1, Patient p2) {
-                return p2.getName().compareTo(p1.getName());
-            }
-        });
-        for (Patient P : patientList) {
-            System.out.println(P);
-        }
-    }
-
-    public void sortPatientASCByID() {
-        List<Patient> patientList = new ArrayList<Patient>(this.values());
-        Collections.sort(patientList, new Comparator<Patient>() {
-            public int compare(Patient p1, Patient p2) {
-                return p1.getID().compareTo(p2.getID());
-            }
-        });
-        for (Patient P : patientList) {
-            System.out.println(P);
-        }
-    }
-
-    public void sortPatientDESCByID() {
-        List<Patient> patientList = new ArrayList<Patient>(this.values());
-        Collections.sort(patientList, new Comparator<Patient>() {
-            public int compare(Patient p1, Patient p2) {
-                return p2.getID().compareTo(p1.getID());
-            }
-        });
-        for (Patient P : patientList) {
-            System.out.println(P);
-        }
-    }
-
+    /**
+     * In ra theo định dạng cho sẵn
+     */
     public void displayP() {
         System.out.println("       LIST OF PATIENTS");
         String sDate = this.checkStartDate();
@@ -237,7 +258,72 @@ public class ListPatient extends HashMap<String, Patient> implements Serializabl
         System.out.println();
         this.displayPatient(sDate, eDate);
     }
+//Các hàm của Phương thức sort
+//-----------------------------------------------------------------------------------------------------------------------------------------//
 
+    /**
+     * Sort tăng dần theo tên
+     */
+    public void sortPatientASCByName() {
+        List<Patient> patientList = new ArrayList<Patient>(this.values());
+        Collections.sort(patientList, new Comparator<Patient>() {
+            public int compare(Patient p1, Patient p2) {
+                return p1.getName().compareTo(p2.getName());
+            }
+        });
+        for (Patient P : patientList) {
+            System.out.println(P);
+        }
+    }
+
+    /**
+     * Sort giảm dần theo tên
+     */
+    public void sortPatientDESCByName() {
+        List<Patient> patientList = new ArrayList<Patient>(this.values());
+        Collections.sort(patientList, new Comparator<Patient>() {
+            public int compare(Patient p1, Patient p2) {
+                return p2.getName().compareTo(p1.getName());
+            }
+        });
+        for (Patient P : patientList) {
+            System.out.println(P);
+        }
+    }
+
+    /**
+     * Sort tăng dần theo ID
+     */
+    public void sortPatientASCByID() {
+        List<Patient> patientList = new ArrayList<Patient>(this.values());
+        Collections.sort(patientList, new Comparator<Patient>() {
+            public int compare(Patient p1, Patient p2) {
+                return p1.getID().compareTo(p2.getID());
+            }
+        });
+        for (Patient P : patientList) {
+            System.out.println(P);
+        }
+    }
+
+    /**
+     * Sort giảm dần theo ID
+     */
+    public void sortPatientDESCByID() {
+        List<Patient> patientList = new ArrayList<Patient>(this.values());
+        Collections.sort(patientList, new Comparator<Patient>() {
+            public int compare(Patient p1, Patient p2) {
+                return p2.getID().compareTo(p1.getID());
+            }
+        });
+        for (Patient P : patientList) {
+            System.out.println(P);
+        }
+    }
+
+    /**
+     * In ra sort tăng dần theo name
+     */
     public void displaySortASCByName() {
         for (int i = 0; i < 82; i++) {
             System.out.print("-");
@@ -252,6 +338,9 @@ public class ListPatient extends HashMap<String, Patient> implements Serializabl
         this.sortPatientASCByName();
     }
 
+    /**
+     * In ra sort giảm dần theo name
+     */
     public void displaySortDESCByName() {
         for (int i = 0; i < 82; i++) {
             System.out.print("-");
@@ -266,6 +355,9 @@ public class ListPatient extends HashMap<String, Patient> implements Serializabl
         this.sortPatientDESCByName();
     }
 
+    /**
+     * In ra sort tăng dần theo ID
+     */
     public void displaySortASCByID() {
         for (int i = 0; i < 82; i++) {
             System.out.print("-");
@@ -280,6 +372,9 @@ public class ListPatient extends HashMap<String, Patient> implements Serializabl
         this.sortPatientASCByID();
     }
 
+    /**
+     * In ra sort dần theo ID
+     */
     public void displaySortDESCByID() {
         for (int i = 0; i < 82; i++) {
             System.out.print("-");
@@ -293,13 +388,15 @@ public class ListPatient extends HashMap<String, Patient> implements Serializabl
         System.out.println();
         this.sortPatientDESCByID();
     }
-
+/**
+ * Các thao tác của hàm sort
+ */
     public void sortP() {
         boolean check1 = true;
         do {
             System.out.println("       LIST OF PATIENTS");
-            String sortedBy = add.addSortedBy();
-            String sortOrder = add.addSortOrder();
+            String sortedBy = check.checkSortedBy();
+            String sortOrder = check.checkSortOrder();
             if (sortOrder.equalsIgnoreCase("asc") && sortedBy.contains("name")) {
                 check1 = false;
                 this.displaySortASCByName();
@@ -318,7 +415,13 @@ public class ListPatient extends HashMap<String, Patient> implements Serializabl
         } while (check1);
     }
 //Phương thức load
+//-----------------------------------------------------------------------------------------------------------------------------------------//
 
+    /**
+     * Phương thức lấy dữ liệu từ file Patients
+     *
+     * @throws Exception
+     */
     public void loadFile() throws Exception {
         ArrayList<Patient> arr = new ArrayList<>();
         FileInputStream fileIn = null;
@@ -355,7 +458,14 @@ public class ListPatient extends HashMap<String, Patient> implements Serializabl
         }
     }
 //Phương thức save
+//-----------------------------------------------------------------------------------------------------------------------------------------//
 
+    /**
+     * Phương thức lưu dữ liệu của bệnh nhân trong chương trình vào file
+     * Patients
+     *
+     * @throws Exception
+     */
     public void saveFile() throws Exception {
         ArrayList<Patient> list = new ArrayList<>(this.values());
         if (list.isEmpty()) {

@@ -5,7 +5,10 @@ import controller.ListPatient;
 import java.util.Scanner;
 import model.Nurse;
 import model.Patient;
-
+/**
+ * Đây là lớp nhập thông tin đầu vào
+ * @author Nguyễn Huy Phúc
+ */
 public class Add {
     Scanner sc = new Scanner(System.in);
 
@@ -21,10 +24,9 @@ public class Add {
         return name;
     }
 
-    public int addAge() {
+    public String addAge() {
         System.out.print("    -> Enter Age: ");
-        int age = sc.nextInt();
-        sc.nextLine();
+        String age = sc.nextLine();
         return age;
     }
 
@@ -64,10 +66,9 @@ public class Add {
         return shift;
     }
 
-    public double addSalary() {
+    public String addSalary() {
         System.out.print("    -> Enter Salary: ");
-        double salary = sc.nextDouble();
-        sc.nextLine();
+        String salary = sc.nextLine();
         return salary;
     }
 
@@ -102,13 +103,13 @@ public class Add {
     }
 
     public String addSortedBy() {
-        System.out.print("       Sorted by: ");
+        System.out.print("       Sorted by( name or id ): ");
         String sortedBy = sc.nextLine();
         return sortedBy;
     }
 
     public String addSortOrder() {
-        System.out.print("       Sort order: ");
+        System.out.print("       Sort order( asc or desc ): ");
         String sortOrder = sc.nextLine();
         return sortOrder;
     }

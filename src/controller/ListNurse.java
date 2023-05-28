@@ -26,13 +26,27 @@ import tool.Add;
 import tool.Check;
 import viewer.Menu;
 
+/**
+ * Đây là lớp chứa các thao tác của y tá
+ *
+ * @author Nguyễn Huy Phúc
+ */
 public class ListNurse extends HashMap<String, Nurse> {
 
     Scanner sc = new Scanner(System.in);
     Menu menu = new Menu();
     Add add = new Add();
+    Check check = new Check();
     ListPatient listP = new ListPatient();
 
+    //các phương thức add
+//-----------------------------------------------------------------------------------------------------------------------------------------//
+    /**
+     * Phương thức thêm 1 y tá mới
+     *
+     * @param n
+     * @return boolean
+     */
     public boolean addNewNurse(Nurse n) {
         if ((this.isExistStaffID(n.getStaffID())) || (this.isExistID(n))) {
             return false;
@@ -42,10 +56,66 @@ public class ListNurse extends HashMap<String, Nurse> {
         }
     }
 
+    /**
+     * Kiểm tra xem ID nhập vào có bị trùng hay không Chọn làm đầu vào
+     *
+     * @return ID
+     */
+    public String checkIDOfNurse() {
+        String id = null;
+        boolean c = true;
+        do {
+            id = add.addID();
+            if (id.trim().equals("")) {
+                System.out.println("   (!) Please enter a non-null value !!! Try again.");
+            } else if (this.existIDOfN(id)) {
+                System.out.println("   (!) ID already exist! Try again.");
+            } else {
+                c = false;
+            }
+        } while (c);
+        return id;
+    }
+
+    /**
+     * Kiểm tra xem staffID nhập vào có bị trùng hay không Chọn làm đầu vào
+     *
+     * @return StaffID
+     */
+    public String checkStaffID() {
+        boolean c = true;
+        String staffID = null;
+        do {
+            staffID = add.addStaffID();
+            if (staffID.trim().equals("")) {
+                System.out.println("   (!) Please enter a non-null value !!! Try again.");
+            } else if (this.isExistStaffID(staffID)) {
+                System.out.println("   (!) StaffID already exist !!! try again.");
+            } else {
+                c = false;
+            }
+        } while (c);
+        return staffID;
+    }
+//các Phương thức chung
+//-----------------------------------------------------------------------------------------------------------------------------------------//
+
+    /**
+     * Kiểm tra xem staffID của y tá có tồn tại hay không
+     *
+     * @param staffID
+     * @return boolean
+     */
     public boolean isExistStaffID(String staffID) {
         return this.containsKey(staffID);
     }
 
+    /**
+     * Kiểm tra xem ID của y tá có tồn tại hay không bằng ID
+     *
+     * @param ID
+     * @return boolean
+     */
     public boolean existIDOfN(String ID) {
         for (Nurse N : this.values()) {
             if (N.getID().equals(ID)) {
@@ -55,42 +125,22 @@ public class ListNurse extends HashMap<String, Nurse> {
         return false;
     }
 
-    public String checkIDOfNurse() {
-        String id = null;
-        boolean c = true;
-        do {
-            id = add.addID();
-            if (id.trim().equals("")) {
-                System.out.println("   (!) Please enter a non-null value !!! Try again.");
-            } else if (this.existIDOfN(id)) {
-                System.out.println("   (!) ID da ton tai! Try again.");
-            } else {
-                c = false;
-            }
-        } while (c);
-        return id;
-    }
-
-    public String checkStaffID() {
-        boolean c = true;
-        String staffID = null;
-        do {
-            staffID = add.addStaffID();
-            if (staffID.trim().equals("")) {
-                System.out.println("   (!) Please enter a non-null value !!! Try again.");
-            } else if (this.isExistStaffID(staffID)) {
-                System.out.println("   (!) StaffID da ton tai !!! try again.");
-            } else {
-                c = false;
-            }
-        } while (c);
-        return staffID;
-    }
-
+    /**
+     * Kiểm tra xem ID của y tá có tồn tại hay không bằng ý tá đó
+     *
+     * @param n
+     * @return boolean
+     */
     public boolean isExistID(Nurse n) {
         return this.containsValue(n.getID());
     }
 
+    /**
+     * Kiểm tra xem tên ý tá đó có tồn tại hay không
+     *
+     * @param name
+     * @return
+     */
     public boolean isExistName(String name) {
         for (Nurse N : this.values()) {
             if (N.getName().equals(name.trim())) {
@@ -101,6 +151,13 @@ public class ListNurse extends HashMap<String, Nurse> {
     }
 
     //Các hàm của phương thức find
+    //-----------------------------------------------------------------------------------------------------------------------------------------//
+    /**
+     * Phương thức tìm ý tá theo tên
+     *
+     * @param name
+     * @return Nurse
+     */
     public Nurse findNurse(String name) {
         Nurse N = null;
         for (Nurse n : this.values()) {
@@ -111,6 +168,9 @@ public class ListNurse extends HashMap<String, Nurse> {
         return N;
     }
 
+    /**
+     * Các thao tác của phương thức find
+     */
     public void findN() {
         boolean find = true;
         do {
@@ -120,27 +180,32 @@ public class ListNurse extends HashMap<String, Nurse> {
                 find = false;
             } else {
                 System.out.println("   (!) Nurse does not exist");
-                int find_ = 0;
-                do {
-                    menu.findNurse();
-                    find_ = sc.nextInt();
-                    sc.nextLine();
-                    switch (find_) {
-                        case 0:
-                            System.out.println("       Exit");
-                            find = false;
-                            break;
-                        case 1:
-                            find_ = 0;
-                            break;
-                    }
-                } while (find_ != 0);
+                menu.findNurse();
+                int find_ = -1;
+                String check = sc.nextLine();
+                if (!check.matches("\\d+")) {
+                    System.out.println("   (!) Please enter true fomat");
+                } else {
+                    do {
+                        find_ = Integer.parseInt(check);
+                        switch (find_) {
+                            case 0:
+                                System.out.println("       Exit");
+                                find = false;
+                                break;
+                            case 1:
+                                find_ = 0;
+                                break;
+                        }
+                    } while (find_ != 0);
+                }
             }
         } while (find);
     }
-//Các hàm của phương thức update
+    //Các hàm của phương thức Update
+    //-----------------------------------------------------------------------------------------------------------------------------------------//
 
-    public void uppdateStaffID() {
+    public void updateStaffID() {
         String staffID;
         staffID = add.addStaffID();
         boolean b = this.isExistStaffID(staffID);
@@ -152,99 +217,126 @@ public class ListNurse extends HashMap<String, Nurse> {
     }
 
     public void updateGender(Nurse a) {
-        String gender = add.addGender();
+        String gender = check.checkGender();
         a.setGener(gender);
         System.out.println("       Update Success");
     }
 
     public void updateAddress(Nurse a) {
-        String address = add.addAddress();
+        String address = check.checkAddress();
         a.setAddress(address);
         System.out.println("       Update Success");
     }
 
     public void updatePhoneNumber(Nurse a) {
-        String phoneNumber = add.addPhoneNumber();
+        String phoneNumber = check.checkPhoneNumber();
         a.setPhoneNumber(phoneNumber);
         System.out.println("       Update Success");
     }
 
     public void updateDepartment(Nurse a) {
-        String deparment = add.addDepartment();
+        String deparment = check.checkDepartment();
         a.setDepartmnet(deparment);
         System.out.println("       Update Success");
     }
 
     public void updateShift(Nurse a) {
-        String shift = add.addShift();
+        String shift = check.checkShift();
         a.setShift(shift);
         System.out.println("       Update Success");
     }
 
     public void updateSalary(Nurse a) {
-        double salary = add.addSalary();
+        String salary = check.checkSalary();
         a.setSalary(salary);
         System.out.println("       Update Success");
     }
 
+    /**
+     * Các thao tác của phương thức Update
+     *
+     * @param staffID
+     */
     public void updateNurse(String staffID) {
-        int b = 0;
+        int b = -1;
         Nurse a = this.get(staffID);
-        Menu menu = new Menu();
         do {
             menu.updateNurse();
-            b = sc.nextInt();
-            sc.nextLine();
-            switch (b) {
-                case 0:
-                    System.out.println("       Exit");
-                    break;
-                case 1:
-                    this.updateGender(a);
-                    break;
-                case 2:
-                    this.updateAddress(a);
-                    break;
-                case 3:
-                    this.updatePhoneNumber(a);
-                    break;
-                case 4:
-                    this.updateDepartment(a);
-                    break;
-                case 5:
-                    this.updateShift(a);
-                    break;
-                case 6:
-                    this.updateSalary(a);
-                    break;
-                default:
-                    System.out.println("       Try Again");
+            String check = sc.nextLine();
+            if (!check.matches("\\d+")) {
+                System.out.println("   (!) Please enter true fomat");
+            } else {
+                b = Integer.parseInt(check);
+                switch (b) {
+                    case 0:
+                        System.out.println("       Exit");
+                        break;
+                    case 1:
+                        this.updateGender(a);
+                        break;
+                    case 2:
+                        this.updateAddress(a);
+                        break;
+                    case 3:
+                        this.updatePhoneNumber(a);
+                        break;
+                    case 4:
+                        this.updateDepartment(a);
+                        break;
+                    case 5:
+                        this.updateShift(a);
+                        break;
+                    case 6:
+                        this.updateSalary(a);
+                        break;
+                    default:
+                        System.out.println("   (!) Try Again");
+                }
             }
         } while (b != 0);
     }
-//Các hàm của phương thức Delete
 
+    /**
+     * Phương thức thao tác tiếp tục nếu staffID có tồn tại
+     *
+     * @param delete
+     * @return boolean
+     */
+    //Các hàm của phương thức Delete
+//-----------------------------------------------------------------------------------------------------------------------------------------//
     public boolean continueDeleteIfExist(boolean delete) {
         delete = true;
         System.out.println("       Delete Fail");
-        int delete__ = 0;
+        int delete__ = -1;
         do {
             menu.deleteNurse();
-            delete__ = sc.nextInt();
-            sc.nextLine();
-            switch (delete__) {
-                case 0:
-                    System.out.println("       Exit");
-                    delete = false;
-                    break;
-                case 1:
-                    delete__ = 0;
-                    break;
+            String check = sc.nextLine();
+            if (!check.matches("\\d+")) {
+                System.out.println("       Please enter true fomat");
+            } else {
+                delete__ = Integer.parseInt(check);
+                switch (delete__) {
+                    case 0:
+                        System.out.println("       Exit");
+                        delete = false;
+                        break;
+                    case 1:
+                        delete__ = 0;
+                        break;
+                }
             }
         } while (delete__ != 0);
         return delete;
     }
 
+    /**
+     * Phương thức kiểm tra người dùng có xác nhận xóa không
+     *
+     * @param delete
+     * @param staffID_
+     * @param x
+     * @return boolean
+     */
     public boolean checkDelete(boolean delete, String staffID_, boolean x) {
         delete = true;
         boolean q = true;
@@ -270,33 +362,57 @@ public class ListNurse extends HashMap<String, Nurse> {
         return delete;
     }
 
+    /**
+     * Phương thức thao tác tiếp tục nếu staffID không tồn tại
+     *
+     * @param delete
+     * @return boolean
+     */
     public boolean continueDeleteIfNotExist(boolean delete) {
         delete = true;
-        int delete_ = 0;
+        int delete_ = -1;
         do {
             menu.deleteNurse();
-            delete_ = sc.nextInt();
-            sc.nextLine();
-            switch (delete_) {
-                case 0:
-                    System.out.println("       Exit");
-                    delete = false;
-                    break;
-                case 1:
-                    delete_ = 0;
-                    break;
+            String check = sc.nextLine();
+            if (!check.matches("\\d+")) {
+                System.out.println("   (!)  Please enter true fomat");
+            } else {
+                delete_ = Integer.parseInt(check);
+                switch (delete_) {
+                    case 0:
+                        System.out.println("       Exit");
+                        delete = false;
+                        break;
+                    case 1:
+                        delete_ = 0;
+                        break;
+                    default:
+                        System.out.println("   (!) Try Again");
+                }
             }
         } while (delete_ != 0);
         return delete;
+
     }
 
-
+    /**
+     * Phương thức xóa theo staffID
+     *
+     * @param staffID
+     * @return
+     */
     public String deleteNurse(String staffID) {
         this.remove(staffID);
         return "       Delete Success.\n";
     }
 //Phương thức load
+    //-----------------------------------------------------------------------------------------------------------------------------------------//
 
+    /**
+     * Phương thức lấy dữ liệu từ file Nurses
+     *
+     * @throws Exception
+     */
     public void loadFile() throws Exception {
         ArrayList<Nurse> arr = new ArrayList<>();
         FileInputStream fileIn = null;
@@ -313,11 +429,11 @@ public class ListNurse extends HashMap<String, Nurse> {
             }
             objectIn.close();
             fileIn.close();
-            System.out.println("LOADED!!!");
+            System.out.println("       LOADED!!!");
         } catch (EOFException eof) {
 
         } catch (Exception ex) {
-            System.out.println("FAIL!!!");
+            System.out.println("       FAIL!!!");
             throw ex;
         } finally {
             if (objectIn != null) {
@@ -332,8 +448,14 @@ public class ListNurse extends HashMap<String, Nurse> {
             this.put(nurse.getStaffID(), nurse);
         }
     }
-//Phương thức save
+//Phương thức save 
+    //-----------------------------------------------------------------------------------------------------------------------------------------//
 
+    /**
+     * Phương thức lưu dữ liệu của y tá trong chương trình vào file Nurses
+     *
+     * @throws Exception
+     */
     public void saveFile() throws Exception {
         ArrayList<Nurse> list = new ArrayList<>(this.values());
         if (list.isEmpty()) {
@@ -351,9 +473,9 @@ public class ListNurse extends HashMap<String, Nurse> {
                 objectOut.flush();
                 objectOut.close();
                 fileOut.close();
-                System.out.println("SAVED!!!");
+                System.out.println("       SAVED!!!");
             } catch (Exception ex) {
-                System.out.println("FAIL!!!");
+                System.out.println("       FAIL!!!");
                 throw ex;
             }
         }

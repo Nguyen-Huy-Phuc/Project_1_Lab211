@@ -1,7 +1,10 @@
 
 package viewer;
 
-
+/**
+ * Lớp chứa định dạng in ra màn hình của các thao tác
+ * @author Nguyễn Huy Phúc
+ */
 public class Menu {
     
     

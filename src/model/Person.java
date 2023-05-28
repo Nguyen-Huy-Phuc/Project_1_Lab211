@@ -1,27 +1,30 @@
-
 package model;
 
 import java.io.Serializable;
+/**
+ * Lớp chứa các thuộc tính chung của 1 người
+ * @author Nguyễn Huy Phúc
+ */
+public class Person implements Serializable {
 
-
-public class Person implements Serializable{
     private String iD;
     private String name;
-    private int age;
+    private String age;
     private String gender;
     private String address;
     private String phoneNumber;
 //-------------------------------------------------------------------------------------------------------//
-    public Person(String iD, String name, int age, String gender, String address, String phoneNumber) {
+
+    public Person(String iD, String name, String age, String gender, String address, String phoneNumber) {
         this.iD = iD;
         this.name = name;
         this.age = age;
         this.gender = gender;
         this.address = address;
-        this.phoneNumber =phoneNumber;
-    } 
+        this.phoneNumber = phoneNumber;
+    }
 //-------------------------------------------------------------------------------------------------------//
-    
+
 //-------------------------------------------------------------------------------------------------------//
     public String getID() {
         return iD;
@@ -31,7 +34,7 @@ public class Person implements Serializable{
         return name;
     }
 
-    public int getAge() {
+    public String getAge() {
         return age;
     }
 
@@ -47,43 +50,59 @@ public class Person implements Serializable{
         return phoneNumber;
     }
 //-------------------------------------------------------------------------------------------------------//
+
     public void setID(String iD) {
-       if(!iD.trim().equals("")) this.iD = iD;
-       else this.iD = "NULL";
+        if (!iD.trim().equals("")) {
+            this.iD = iD;
+        } else {
+            this.iD = "NULL";
+        }
     }
 
     public void setName(String name) {
-        if(!name.trim().equals("")) this.name = name;
-       else this.name = "NULL";
+        if (!name.trim().equals("")) {
+            this.name = name;
+        } else {
+            this.name = "NULL";
+        }
     }
 
-    public void setAge(int age) {
-        if(age >= 0) this.age = age;
-        else this.age = 0;
+    public void setAge(String age) {
+        if (!age.trim().equals("")) {
+            this.age = age;
+        } else {
+            this.age = "NULL";
+        }
     }
 
     public void setGener(String gener) {
-       if(!gener.trim().equals("")) this.gender = gener;
-       else this.gender = "NULL";
+        if (!gener.trim().equals("")) {
+            this.gender = gener;
+        } else {
+            this.gender = "NULL";
+        }
     }
 
     public void setAddress(String address) {
-       if(!address.trim().equals("")) this.address = address;
-       else this.address = "NULL";
+        if (!address.trim().equals("")) {
+            this.address = address;
+        } else {
+            this.address = "NULL";
+        }
     }
 
-     public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         if (phoneNumber.matches("\\d+")) {
             this.phoneNumber = phoneNumber;
         } else {
             this.phoneNumber = "NULL";
         }
     }
- //-------------------------------------------------------------------------------------------------------//  
+    //-------------------------------------------------------------------------------------------------------//  
 
     @Override
     public String toString() {
-        return String.format("%s,%s,%d,%s,%s", getID(),getName(),getAge(),getGender(),getAddress(),getPhoneNumber());
+        return String.format("%s,%s,%d,%s,%s", getID(), getName(), getAge(), getGender(), getAddress(), getPhoneNumber());
     }
-  
+
 }

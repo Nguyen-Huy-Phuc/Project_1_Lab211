@@ -2,16 +2,19 @@ package model;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
-
+/**
+ * Lớp chứa các thuộc tính của y tá
+ * @author Nguyễn Huy Phúc
+ */
 public class Nurse extends Person implements Serializable {
 
     private String staffID;
     private String departmnet;
     private String shift;
-    private double salary;
+    private String salary;
 //----------------------------------------------------------------------//
 
-    public Nurse(String iD, String name, int age, String gender, String address, String phoneNumber, String staffID, String departmnet, String shift, double salary) {
+    public Nurse(String iD, String name, String age, String gender, String address, String phoneNumber, String staffID, String departmnet, String shift, String salary) {
         super(iD, name, age, gender, address, phoneNumber);
         this.staffID = staffID;
         this.departmnet = departmnet;
@@ -32,7 +35,7 @@ public class Nurse extends Person implements Serializable {
         return shift;
     }
 
-    public double getSalary() {
+    public String getSalary() {
         return salary;
     }
 //---------------------------------------------------------------------//
@@ -61,20 +64,19 @@ public class Nurse extends Person implements Serializable {
         }
     }
 
-    public void setSalary(double salary) {
-        if (salary >= 0) {
+    public void setSalary(String salary) {
+        if (!salary.trim().equals("")) {
             this.salary = salary;
         } else {
-            this.salary = 0;
+            this.salary = "NULL";
         }
     }
 
 //-------------------------------------------------------------------------//     
     @Override
     public String toString() {
-        DecimalFormat df = new DecimalFormat("###,###,### vnd");
-        return String.format("       %s,%s,%d,%s,%s,%s,%s,%s,%s",
-                getStaffID(), getName(), getAge(), getGender(), getAddress(), getPhoneNumber(), getDepartmnet(), getShift(), df.format(getSalary()));
+        return String.format("       %s,%s,%s,%s,%s,%s,%s,%s,%s",
+                getStaffID(), getName(), getAge(), getGender(), getAddress(), getPhoneNumber(), getDepartmnet(), getShift(), getSalary());
     }
 
 }

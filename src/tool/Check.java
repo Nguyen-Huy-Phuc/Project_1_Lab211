@@ -8,15 +8,15 @@ import java.util.regex.Pattern;
 import model.Nurse;
 import model.Patient;
 
+/**
+ * Lớp kiểm tra thông tin đầu vào
+ *
+ * @author Nguyễn Huy Phúc
+ */
 public class Check {
 
-
-    private Add add = new Add();
+    Add add = new Add();
     Scanner sc = new Scanner(System.in);
-
-  
-
-    
 
     public String checkName() {
         String name = null;
@@ -32,16 +32,17 @@ public class Check {
         return name;
     }
 
-    public int checkAge() {
+    public String checkAge() {
         boolean c = true;
-        int age = 0;
+        String age = null;
         do {
             age = add.addAge();
-            
-            if (age > 0) {;
-                c = false;
-            } else {
+            if (age.trim().equals("")) {
                 System.out.println("   (!) Please enter a non-null value !!! Try again.");
+            } else if (!age.matches("\\d+")) {
+                System.out.println("   (!) Age is not true !!! try again.");
+            } else {
+                c = false;
             }
         } while (c);
         return age;
@@ -80,10 +81,10 @@ public class Check {
         String phoneNumber = null;
         do {
             phoneNumber = add.addPhoneNumber();
-            if (!phoneNumber.matches("\\d+")) {
-                System.out.println("   (!) Phone number is not true !!! try again.");
-            } else if (phoneNumber.trim().equals("")) {
+            if (phoneNumber.trim().equals("")) {
                 System.out.println("   (!) Please enter a non-null value !!! Try again.");
+            } else if (!phoneNumber.matches("\\d+")) {
+                System.out.println("   (!) Phone number is not true !!! try again.");
             } else {
                 c = false;
             }
@@ -116,7 +117,7 @@ public class Check {
             if (matcher.matches()) {
                 c = false;
             } else {
-                System.out.println("   (!) Please enter correct format !!! Try again.");
+                System.out.println("   (!) Please enter correct format (dd/MM/yyyy) !!! Try again.");
             }
         } while (c);
         return adimissionDate;
@@ -133,17 +134,11 @@ public class Check {
             if (matcher.matches()) {
                 c = false;
             } else {
-                System.out.println("   (!) Please enter correct format !!! Try again.");
+                System.out.println("   (!) Please enter correct format (dd/MM/yyyy) !!! Try again.");
             }
         } while (c);
         return dischargeDate;
     }
-
-    
-
-   
-
-
 
     public String checkDepartment() {
         boolean c = true;
@@ -151,7 +146,7 @@ public class Check {
         do {
             department = add.addDepartment();
             if (department.length() > 50) {
-                System.out.println("   (!) toi da la 50 ki tu !!! try again.");
+                System.out.println("   (!) Enter up to 50 characters !!! try again.");
             } else if (department.trim().equals("")) {
                 System.out.println("   (!) Please enter a non-null value !!! Try again.");
             } else {
@@ -175,18 +170,48 @@ public class Check {
         return shift;
     }
 
-    public double checkSalary() {
+    public String checkSalary() {
         boolean c = true;
-        double salary = 0;
+        String salary = null;
         do {
             salary = add.addSalary();
-            if (salary > 0) {
-                c = false;
-            } else {
+            if (salary.trim().equals("")) {
                 System.out.println("   (!) Please enter a non-null value !!! Try again.");
+            } else if (!salary.matches("\\d+")) {
+                System.out.println("   (!) Salary is not true !!! try again.");
+            } else {
+                c = false;
             }
         } while (c);
         return salary;
     }
-        
+
+    public String checkSortedBy() {
+        boolean check = true;
+        String sortedBy = null;
+        do {
+            sortedBy = add.addSortedBy();
+            if (sortedBy.equalsIgnoreCase("name") || sortedBy.equalsIgnoreCase("id")) {
+                check = false;
+            } else {
+                System.out.println("   (!) Try Again");
+            }
+        } while (check);
+        return sortedBy;
+    }
+
+    public String checkSortOrder() {
+        boolean check = true;
+        String sortedOrder = null;
+        do {
+            sortedOrder = add.addSortOrder();
+            if (sortedOrder.contains("asc") || sortedOrder.contains("desc")) {
+                check = false;
+            } else {
+                System.out.println("   (!) Try Again");
+            }
+        } while (check);
+        return sortedOrder;
+    }
+
 }
